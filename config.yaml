@@ -1,0 +1,24 @@
+site_name: arsen-ai
+site_purpose: AI 에이전트 플랫폼 메인 홈페이지. 프로젝트 쇼케이스 + 브랜드 소개
+target_audience: AI에 관심 있는 개발자, 학습자, 크리에이터
+design_style: 다크 모던 미니멀. 우주/AI 느낌의 그라디언트
+color_theme: 인디고(#4F46E5) + 퍼플(#7C3AED) + 다크배경(#0F0F1A)
+mobile_friendly: true
+pages:
+  - 메인 랜딩 (단일 페이지, 섹션 스크롤)
+features:
+  - 히어로 섹션 (타이핑 애니메이션, CTA 버튼)
+  - 프로젝트 카드 (arsen-dashboard, ai-tools, sns-ops, member-system)
+  - AI 에이전트 팀 소개 (메타팀, 코드팀, 웹빌더팀 등)
+  - 유튜브 채널 링크
+  - 깃허브 링크
+  - 네비게이션 (스크롤 연동)
+  - 푸터
+animations: 보통 (fade-in, 타이핑, 카드 호버)
+language: 한국어
+content_tone: 전문적이지만 친근한
+reference_site: 없음
+backend_needed: false
+database_needed: false
+auth_needed: false
+deploy_target: GCP VM (hub.arsen-ai.com)
