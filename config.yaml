@@ -21,4 +21,4 @@ reference_site: 없음
 backend_needed: false
 database_needed: false
 auth_needed: false
-deploy_target: GCP VM (hub.arsen-ai.com)
+deploy_target: Cloudflare Pages (arsen-ai.com)
