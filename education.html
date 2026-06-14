@@ -3,1453 +3,176 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="ARSEN AI 수업 대시보드. 설치 링크, 수업 프롬프트, 모델별 기본 설정, 업무 자동화 템플릿을 한 곳에서 확인합니다.">
-  <meta property="og:title" content="ARSEN AI 수업 대시보드">
-  <meta property="og:description" content="수업 전 설치 링크와 복사해서 쓰는 AI 프롬프트 자료를 제공합니다.">
-  <meta property="og:url" content="https://arsen-ai.com/education.html">
-  <link rel="canonical" href="https://arsen-ai.com/education.html">
-  <title>ARSEN AI 클래스 · 수업 대시보드</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0d1014;
-      --bg-soft: #11151a;
-      --panel: #161b21;
-      --panel-2: #1c222a;
-      --panel-3: #232a33;
-      --line: #2a323c;
-      --line-soft: #1f262e;
-      --text: #f1f4f7;
-      --muted: #97a1ab;
-      --soft: #cdd5dd;
-      --accent: #8aa9ff;
-      --accent-soft: rgba(138,169,255,.12);
-      --accent-line: rgba(138,169,255,.42);
-      --gold: #e7c074;
-      --gold-soft: rgba(231,192,116,.12);
-      --gold-line: rgba(231,192,116,.4);
-      --ok: #7bd28a;
-      --ok-soft: rgba(123,210,138,.1);
-      --ok-line: rgba(123,210,138,.36);
-      --warn: #f0b46a;
-      --warn-soft: rgba(240,180,106,.1);
-      --warn-line: rgba(240,180,106,.36);
-      --danger: #ff8a8a;
-      --shadow: 0 14px 38px rgba(0,0,0,.34);
-    }
-    * { box-sizing: border-box; }
-    html, body { -webkit-text-size-adjust: 100%; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-      font-feature-settings: "ss01" on, "cv11" on;
-      line-height: 1.55;
-    }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    button, input, textarea, select { font: inherit; color: var(--text); }
-    button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--line);
-      background: var(--panel-2);
-      min-height: 38px;
-      border-radius: 8px;
-      padding: 0 14px;
-      cursor: pointer;
-      font-weight: 600;
-      letter-spacing: -.01em;
-      line-height: 1.2;
-      white-space: nowrap;
-      transition: background .12s ease, border-color .12s ease, color .12s ease;
-    }
-    button:hover { background: var(--panel-3); border-color: var(--line); }
-    button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-    .btn-primary {
-      background: var(--accent);
-      color: #0c1018;
-      border-color: var(--accent);
-    }
-    .btn-primary:hover { background: #9bb6ff; border-color: #9bb6ff; color: #0c1018; }
-    .btn-ghost {
-      background: transparent;
-      color: var(--soft);
-    }
-    .btn-ghost:hover { color: var(--text); }
-
-    /* ===== Layout ===== */
-    .wrap {
-      width: min(1080px, calc(100% - 28px));
-      margin: 0 auto;
-      padding: 24px 0 56px;
-    }
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--line-soft);
-      margin-bottom: 22px;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-    .mark {
-      width: 36px;
-      height: 36px;
-      flex: 0 0 auto;
-      border-radius: 9px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--line);
-      background: var(--panel-2);
-      color: var(--text);
-      font-weight: 800;
-      font-size: 15px;
-      letter-spacing: .02em;
-    }
-    .brand-title {
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: -.01em;
-    }
-    .brand-sub {
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 3px;
-    }
-    .toolbar {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-	    }
-	    #editToggle { display: none; }
-	    body.operator-mode #editToggle { display: inline-flex; }
-
-    /* ===== Hero ===== */
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr);
-      gap: 18px;
-      margin-bottom: 26px;
-    }
-    .hero-main {
-      border: 1px solid var(--line-soft);
-      background: var(--panel);
-      border-radius: 12px;
-      padding: 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-      box-shadow: var(--shadow);
-    }
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-    .eyebrow::before {
-      content: "";
-      width: 22px;
-      height: 1px;
-      background: var(--accent-line);
-    }
-    h1 {
-      margin: 12px 0 0;
-      font-size: clamp(26px, 3.8vw, 40px);
-      line-height: 1.18;
-      letter-spacing: -.02em;
-      font-weight: 760;
-    }
-    .lead {
-      margin: 12px 0 0;
-      max-width: 640px;
-      color: var(--soft);
-      font-size: 15.5px;
-      line-height: 1.72;
-    }
-    .steps {
-      display: grid;
-      gap: 10px;
-      margin: 4px 0 0;
-      padding: 0;
-      list-style: none;
-    }
-    .step {
-      display: grid;
-      grid-template-columns: 28px 1fr;
-      gap: 12px;
-      align-items: start;
-      color: var(--soft);
-      font-size: 14.5px;
-      line-height: 1.55;
-    }
-    .step-num {
-      width: 24px;
-      height: 24px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: var(--panel-2);
-      color: var(--text);
-      font-size: 12px;
-      font-weight: 700;
-      display: grid;
-      place-items: center;
-    }
-    .hero-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    /* ===== Schedule ===== */
-    .schedule {
-      border: 1px solid var(--line-soft);
-      background: var(--panel);
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .panel-label {
-      font-size: 11px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 700;
-    }
-    .schedule-list {
-      display: grid;
-      gap: 9px;
-    }
-    .slot {
-      padding: 13px 14px;
-      border: 1px solid var(--line-soft);
-      border-radius: 9px;
-      background: var(--panel-2);
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 12px;
-      align-items: start;
-    }
-    .slot-no {
-      width: 26px;
-      height: 26px;
-      flex: 0 0 auto;
-      border-radius: 7px;
-      background: var(--panel-3);
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-      display: grid;
-      place-items: center;
-    }
-    .slot-body strong {
-      display: block;
-      font-size: 14.5px;
-      font-weight: 700;
-      letter-spacing: -.01em;
-      margin-bottom: 4px;
-    }
-    .slot-body span {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-    }
-    .slot-tag {
-      display: inline-block;
-      margin-top: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 999px;
-      letter-spacing: .04em;
-    }
-    .slot.required {
-      border-color: var(--accent-line);
-      background: linear-gradient(180deg, var(--accent-soft), transparent 100%), var(--panel-2);
-    }
-    .slot.required .slot-no {
-      background: var(--accent);
-      color: #0c1018;
-    }
-    .slot.required .slot-tag {
-      background: var(--accent-soft);
-      color: var(--accent);
-      border: 1px solid var(--accent-line);
-    }
-    .slot.optional .slot-tag {
-      background: var(--gold-soft);
-      color: var(--gold);
-      border: 1px solid var(--gold-line);
-    }
-
-    /* ===== Section ===== */
-    .section {
-      border: 1px solid var(--line-soft);
-      background: var(--panel);
-      border-radius: 12px;
-      padding: 20px 20px 22px;
-      margin-top: 16px;
-      box-shadow: var(--shadow);
-    }
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--line-soft);
-    }
-    .section-title-wrap {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      flex-wrap: wrap;
-      min-width: 0;
-    }
-    .section-title {
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: -.01em;
-      color: var(--text);
-    }
-    .section-hint {
-      font-size: 12.5px;
-      color: var(--muted);
-    }
-    .section-count {
-      flex: 0 0 auto;
-      color: var(--muted);
-      font-size: 12px;
-      padding: 3px 9px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: var(--panel-2);
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
-    .card {
-      border: 1px solid var(--line-soft);
-      border-radius: 10px;
-      background: var(--panel-2);
-      padding: 16px;
-      display: flex;
-      min-height: 200px;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .card-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .card-title {
-      font-size: 16px;
-      font-weight: 700;
-      line-height: 1.35;
-      letter-spacing: -.01em;
-      word-break: keep-all;
-      overflow-wrap: anywhere;
-    }
-    .status {
-      flex: 0 0 auto;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 3px 9px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .02em;
-      color: var(--muted);
-      background: var(--panel-3);
-      max-width: 140px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-	    .status.official { color: var(--ok); border-color: var(--ok-line); background: var(--ok-soft); }
-	    .status.ready { color: var(--accent); border-color: var(--accent-line); background: var(--accent-soft); }
-	    .status.optional { color: var(--warn); border-color: var(--warn-line); background: var(--warn-soft); }
-	    .status.template { color: var(--gold); border-color: var(--gold-line); background: var(--gold-soft); }
-    .desc {
-      color: var(--soft);
-      font-size: 14px;
-      line-height: 1.6;
-      word-break: keep-all;
-      overflow-wrap: anywhere;
-    }
-    .copy-wrap {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-    .copy-label {
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-      font-weight: 700;
-    }
-    .copy {
-      margin: 0;
-      padding: 12px 12px;
-      border: 1px solid var(--line-soft);
-      border-radius: 8px;
-      background: var(--bg-soft);
-      color: #d8dee5;
-      font-family: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace;
-      font-size: 12.5px;
-      line-height: 1.6;
-      white-space: pre-wrap;
-      word-break: break-word;
-      overflow-wrap: anywhere;
-      max-height: 160px;
-      overflow: auto;
-    }
-    .actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: auto;
-    }
-    .actions button {
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-    .empty, .notice {
-      border: 1px dashed var(--line);
-      border-radius: 10px;
-      color: var(--muted);
-      padding: 22px;
-      line-height: 1.65;
-      background: rgba(255,255,255,.02);
-      text-align: center;
-    }
-    .notice {
-      border-style: solid;
-      background: var(--panel);
-      box-shadow: var(--shadow);
-      margin-top: 16px;
-    }
-
-    /* ===== Editor ===== */
-    .edit-shell {
-      display: none;
-      border: 1px solid var(--line);
-      background: var(--panel);
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 18px;
-      box-shadow: var(--shadow);
-    }
-    body.editing .edit-shell { display: block; }
-    body.editing .student-view { display: none; }
-    .edit-banner {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      margin-bottom: 14px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel-2);
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .edit-banner::before {
-      content: "운영자";
-      flex: 0 0 auto;
-      padding: 2px 7px;
-      border-radius: 4px;
-      background: var(--panel-3);
-      color: var(--text);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .04em;
-    }
-    .edit-auth {
-      display: grid;
-      grid-template-columns: minmax(190px, 260px) auto minmax(180px, 1fr);
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 14px;
-      padding: 10px;
-      border: 1px solid var(--line-soft);
-      border-radius: 9px;
-      background: rgba(255,255,255,.025);
-    }
-    .auth-status {
-      min-width: 0;
-      color: var(--muted);
-      font-size: 12.5px;
-      line-height: 1.4;
-    }
-    .section-tabs {
-      display: flex;
-      gap: 7px;
-      flex-wrap: wrap;
-      margin: 14px 0 4px;
-    }
-    .section-tab {
-      min-height: 34px;
-      border-radius: 999px;
-      padding: 0 12px;
-      color: var(--soft);
-      background: transparent;
-    }
-    .section-tab.active {
-      border-color: var(--accent-line);
-      background: var(--accent-soft);
-      color: var(--text);
-    }
-    .edit-section {
-      border: 1px solid var(--line-soft);
-      border-radius: 10px;
-      margin-top: 12px;
-      background: rgba(255,255,255,.018);
-      overflow: hidden;
-    }
-    .edit-section-head {
-      width: 100%;
-      min-height: 46px;
-      border: 0;
-      border-radius: 0;
-      background: var(--panel-2);
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 0 14px;
-      text-align: left;
-    }
-    .edit-section-title {
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-weight: 800;
-    }
-    .edit-section-meta {
-      flex: 0 0 auto;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .edit-section-body {
-      padding: 0 12px 12px;
-    }
-	    .edit-row {
-	      border: 1px solid var(--line-soft);
-	      border-radius: 9px;
-	      background: var(--panel-2);
-	      padding: 14px;
-	      margin-top: 10px;
-	    }
-	    .edit-row.hidden-resource {
-	      border-color: rgba(255,255,255,.06);
-	      background: rgba(255,255,255,.025);
-	      opacity: .72;
-	    }
-	    .edit-row-head {
-	      display: flex;
-	      justify-content: space-between;
-	      align-items: center;
-	      gap: 10px;
-	      margin-bottom: 10px;
-	    }
-	    .edit-row-title {
-	      min-width: 0;
-	      color: var(--soft);
-	      font-size: 13px;
-	      font-weight: 700;
-	      overflow: hidden;
-	      text-overflow: ellipsis;
-	      white-space: nowrap;
-	    }
-	    .visibility-pill {
-	      flex: 0 0 auto;
-	      border: 1px solid var(--ok-line);
-	      background: var(--ok-soft);
-	      color: var(--ok);
-	      border-radius: 999px;
-	      padding: 3px 9px;
-	      font-size: 11px;
-	      font-weight: 800;
-	      letter-spacing: .03em;
-	    }
-	    .hidden-resource .visibility-pill {
-	      border-color: var(--warn-line);
-	      background: var(--warn-soft);
-	      color: var(--warn);
-	    }
-	    .edit-grid {
-	      display: grid;
-	      grid-template-columns: 1fr 1.2fr .8fr 1.8fr;
-	      gap: 8px;
-	    }
-    .edit-row label {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .04em;
-      color: var(--muted);
-      margin-bottom: 4px;
-      text-transform: uppercase;
-    }
-	    input, textarea, select {
-	      width: 100%;
-	      border: 1px solid var(--line);
-	      border-radius: 7px;
-	      background: var(--bg-soft);
-      padding: 9px 11px;
-      outline: none;
-      font-size: 14px;
-    }
-    select option {
-      background: var(--bg-soft);
-      color: var(--text);
-    }
-	    textarea {
-      margin-top: 8px;
-      min-height: 84px;
-      resize: vertical;
-      line-height: 1.55;
-      font-family: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace;
-      font-size: 12.5px;
-	    }
-	    input:focus, textarea:focus, select:focus { border-color: var(--accent-line); }
-	    .edit-filter {
-	      min-width: 130px;
-	      width: auto;
-	      min-height: 38px;
-	      color: var(--text);
-	    }
-	    .edit-actions {
-	      display: flex;
-	      gap: 8px;
-	      flex-wrap: wrap;
-	      margin-top: 12px;
-	      justify-content: flex-end;
-	    }
-	    .edit-actions .danger {
-	      color: var(--danger);
-	      border-color: rgba(255,138,138,.34);
-	    }
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 22px;
-      transform: translateX(-50%);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: #0a0d12;
-      color: var(--text);
-      padding: 11px 16px;
-      box-shadow: var(--shadow);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .2s ease, transform .2s ease;
-      max-width: min(560px, calc(100vw - 32px));
-      text-align: center;
-      font-size: 14px;
-      z-index: 30;
-    }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-2px); }
-    .footer {
-      margin-top: 36px;
-      padding-top: 18px;
-      border-top: 1px solid var(--line-soft);
-      color: var(--muted);
-      font-size: 12.5px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px 14px;
-      justify-content: space-between;
-    }
-    .sr-only {
-      position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;
-    }
-
-    @media (max-width: 920px) {
-      .hero { grid-template-columns: 1fr; }
-      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .edit-grid { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 640px) {
-      .wrap { width: min(100% - 22px, 1080px); padding-top: 18px; }
-      .topbar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-      }
-      .toolbar { justify-content: flex-start; }
-      .hero-main { padding: 22px; }
-      h1 { font-size: clamp(24px, 6.4vw, 32px); }
-      .section { padding: 18px; }
-      .section-head { flex-direction: column; align-items: flex-start; }
-      .edit-auth { grid-template-columns: 1fr; }
-      .grid, .edit-grid { grid-template-columns: 1fr; }
-      .card { min-height: 0; }
-      .actions button { flex: 1 1 100%; }
-      .footer { flex-direction: column; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { transition: none !important; }
-    }
-  </style>
+  <title>강의/교육 - ARSEN AI</title>
+  <meta name="description" content="AI 도구 세팅, 업무 자동화, 콘텐츠 운영을 직접 만드는 ARSEN AI 실습형 강의입니다.">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link data-arsen-theme="active" rel="stylesheet" href="assets/styles.css">
+  <script src="assets/theme-loader.js?v=20260614-modern-public"></script>
 </head>
 <body>
-  <div class="wrap">
-    <header class="topbar">
-      <div class="brand">
-        <div class="mark" aria-hidden="true">A</div>
-        <div>
-          <div class="brand-title">ARSEN AI 클래스</div>
-          <div class="brand-sub">수업 대시보드 · 일요일 진행</div>
+  <nav class="nav-blur fixed inset-x-0 top-0 z-50 border-b border-neutral-200/80">
+    <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
+      <a class="site-logo" href="index.html"><span class="site-logo-mark">AI</span><span>ARSEN AI</span></a>
+      <div class="hidden items-center gap-8 text-sm font-semibold text-neutral-500 md:flex">
+        <a class="nav-link" href="education.html">강의/교육</a>
+        <a class="nav-link" href="store.html">스토어</a>
+        <a class="nav-link" href="cases.html">사례</a>
+        <a class="nav-link" href="https://apply.arsen-ai.com/frontend/status.html">예약 확인</a>
+        <a class="nav-link" href="contact.html">채널</a>
+        <a class="nav-pill" href="consulting.html">상담 신청</a>
+      </div>
+      <button id="menuBtn" class="md:hidden rounded-full border border-neutral-200 px-4 py-2 text-sm font-bold" type="button" aria-label="메뉴 열기" aria-expanded="false">메뉴</button>
+    </div>
+    <div id="mobileMenu" class="hidden border-t border-neutral-200 bg-white px-5 py-4 md:hidden">
+      <div class="grid gap-3 text-sm font-bold text-neutral-700">
+        <a href="education.html">강의/교육</a><a href="store.html">스토어</a><a href="cases.html">사례</a><a href="https://apply.arsen-ai.com/frontend/status.html">예약 확인</a><a href="contact.html">채널</a>
+        <a class="nav-pill mt-2" href="consulting.html">상담 신청</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="bg-neutral-950 pt-16 text-white">
+    <div class="mx-auto grid max-w-6xl gap-10 px-5 py-24 md:py-28 lg:grid-cols-[1fr_420px] lg:items-center">
+      <div data-animate>
+        <p class="section-label">education</p>
+        <h1 class="headline mt-5 text-4xl md:text-5xl">하루 배우고, 다음 날 바로 운영에 씁니다.</h1>
+        <p class="mt-6 max-w-2xl text-lg text-white/62">ARSEN AI 강의는 강의자료보다 결과물을 우선합니다. 신청 페이지, 자동화 흐름, 콘텐츠 제작, 실무 도구 세팅을 직접 만들며 익힙니다.</p>
+        <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+          <a class="btn-light" href="#class-flow">강의 선택하기</a>
+          <a class="btn-ghost" href="https://apply.arsen-ai.com/frontend/status.html">예약 확인</a>
         </div>
       </div>
-		      <nav class="toolbar" aria-label="페이지 도구">
-			        <button type="button" class="btn-ghost" onclick="copyPageLink()" aria-label="수업 대시보드 공개 주소 복사">공개 주소 복사</button>
-	        <button type="button" class="btn-ghost" onclick="reloadResources()" aria-label="자료 새로고침">자료 새로고침</button>
-	        <button type="button" id="editToggle" onclick="toggleEdit()" aria-label="자료 편집과 수강생 미리보기 전환">자료 편집</button>
-      </nav>
-    </header>
-
-    <main>
-      <section class="hero" aria-label="수업 대시보드 안내">
-        <div class="hero-main">
-          <div>
-            <span class="eyebrow">수강생 안내</span>
-            <h1>수업 시작 전, 이 페이지만<br>따라오시면 준비 끝납니다.</h1>
-            <p class="lead">
-              아래 자료는 강의 진행 순서대로 정리되어 있습니다.
-              설치 링크는 <strong>새 탭</strong>에서 열리고, 실습 문장은 <strong>복사</strong> 버튼을 누르면 바로 사용할 수 있습니다.
-            </p>
-          </div>
-          <ol class="steps" aria-label="진행 순서">
-            <li class="step"><span class="step-num">1</span><span><strong>설치 링크</strong> 섹션의 공식 페이지에서 필요한 앱을 설치합니다.</span></li>
-            <li class="step"><span class="step-num">2</span><span>Mac 터미널 실습이 필요한 경우 <strong>터미널 복붙</strong>의 명령을 그대로 붙여 넣습니다.</span></li>
-            <li class="step"><span class="step-num">3</span><span>수업 중 <strong>실습 프롬프트</strong>를 복사해 각자 도구에 붙여 넣고 진행합니다.</span></li>
-          </ol>
-          <div class="hero-actions">
-            <button type="button" class="btn-primary" onclick="scrollToResources()">자료 바로 보기</button>
-            <button type="button" onclick="openLink('https://open.kakao.com/o/gm9tRoJh')">정보 공유방 열기</button>
-            <button type="button" onclick="openLink('https://open.kakao.com/o/s88zv6pf')">1:1 문의 열기</button>
-          </div>
-        </div>
-        <aside class="schedule" aria-label="일요일 진행 일정">
-          <div class="panel-label">일요일 진행 일정</div>
-          <div class="schedule-list">
-            <div class="slot required">
-              <div class="slot-no" aria-hidden="true">1</div>
-              <div class="slot-body">
-                <strong>1회차 · 10:00 — 12:00</strong>
-                <span>AI 전체 개요, 계정과 앱 세팅, 기본 사용법을 함께 맞춥니다.</span>
-                <span class="slot-tag">필수 참여</span>
-              </div>
-            </div>
-            <div class="slot optional">
-              <div class="slot-no" aria-hidden="true">2</div>
-              <div class="slot-body">
-                <strong>2회차 · 13:00 — 15:00</strong>
-                <span>업무별 자동화 방향을 잡고 개인 상담으로 확장합니다.</span>
-                <span class="slot-tag">선택 참여</span>
-              </div>
-            </div>
-            <div class="slot optional">
-              <div class="slot-no" aria-hidden="true">3</div>
-              <div class="slot-body">
-                <strong>3회차 · 16:00 — 18:00</strong>
-                <span>부족한 세팅을 보완하고 각자 업무 실습을 이어갑니다.</span>
-                <span class="slot-tag">선택 참여</span>
-              </div>
-            </div>
-          </div>
-        </aside>
-      </section>
-
-      <div class="student-view">
-        <div id="resourceRoot" class="notice" role="status">교육 자료를 불러오는 중입니다.</div>
+      <div class="grid gap-4" data-animate data-delay="2">
+        <div class="metric-card p-6"><span class="text-sm text-white/48">실습 비중</span><strong class="stat-number mt-3" data-count="70" data-suffix="%">0%</strong></div>
+        <div class="metric-card p-6"><span class="text-sm text-white/48">권장 인원</span><strong class="stat-number mt-3" data-count="4" data-suffix="명">0명</strong></div>
+        <div class="metric-card p-6"><span class="text-sm text-white/48">운영 흐름</span><strong class="mt-3 block text-3xl font-black">신청 - 예약 - 후기</strong></div>
       </div>
+    </div>
+  </header>
 
-	      <section class="edit-shell" aria-label="교육 자료 편집">
-		        <div class="edit-banner" role="note">
-		          이 영역은 운영자만 보입니다. 숨긴 자료는 보관되지만 수강생 공개 페이지에는 표시되지 않습니다.
-		          <strong>공개 화면과 수강생 화면은 같은 페이지입니다.</strong>
-		        </div>
-        <div class="edit-auth">
-          <input id="adminKeyInput" type="password" autocomplete="current-password" placeholder="관리자 비밀번호" aria-label="관리자 비밀번호">
-          <button type="button" onclick="saveAdminKey()">비밀번호 적용</button>
-          <span id="authStatus" class="auth-status">비밀번호를 적용하면 숨김 템플릿까지 불러옵니다.</span>
+  <main>
+    <section id="curriculum" class="py-20 md:py-24">
+      <div class="mx-auto max-w-6xl px-5">
+        <div class="max-w-3xl" data-animate>
+          <p class="section-label">curriculum</p>
+          <h2 class="headline mt-4 text-3xl md:text-4xl">AI 기초부터 운영 자동화까지 한 흐름으로 배웁니다.</h2>
         </div>
-        <div class="section-head">
-	          <div class="section-title-wrap">
-	            <div class="section-title">자료 편집</div>
-	            <span class="section-hint" id="editSummary">필드를 수정하고 저장을 누르면 수강생 화면에 반영됩니다.</span>
-	          </div>
-		          <div class="toolbar" role="group" aria-label="편집 도구">
-		            <select id="editFilter" class="edit-filter" onchange="setEditorFilter(this.value)" aria-label="자료 표시 필터">
-		              <option value="all">전체 보기</option>
-		              <option value="visible">공개만</option>
-		              <option value="hidden">숨김만</option>
-		            </select>
-		            <button type="button" onclick="addEditRow()">자료 추가</button>
-			            <button type="button" onclick="copyText(EDUCATION_PUBLIC_URL)">공개 주소 복사</button>
-	            <button type="button" class="btn-primary" onclick="saveResources()">변경 저장</button>
-	            <button type="button" class="btn-ghost" onclick="toggleEdit(false)">수강생 미리보기</button>
+        <div class="mt-12 grid gap-5 md:grid-cols-2">
+          <article class="soft-card card-lift p-7" data-animate data-delay="1">
+            <span class="chip">기초 세팅</span>
+            <h3 class="mt-6 text-2xl font-black">AI 도구와 계정 세팅</h3>
+            <p class="mt-3 text-neutral-500">ChatGPT, Claude, 브라우저 자동화, 파일 관리 기본 구조를 실제 작업 기준으로 정리합니다.</p>
+          </article>
+          <article class="soft-card card-lift p-7" data-animate data-delay="2">
+            <span class="chip">자동화</span>
+            <h3 class="mt-6 text-2xl font-black">반복 업무 줄이기</h3>
+            <p class="mt-3 text-neutral-500">신청 정리, 안내문 작성, 후기 승인, 콘텐츠 초안 생성 같은 반복 작업을 자동화 관점으로 설계합니다.</p>
+          </article>
+          <article class="soft-card card-lift p-7" data-animate data-delay="3">
+            <span class="chip">콘텐츠</span>
+            <h3 class="mt-6 text-2xl font-black">블로그와 후기 콘텐츠 운영</h3>
+            <p class="mt-3 text-neutral-500">수업 결과물, 후기 링크, 승인 후 공개 흐름까지 홍보 페이지와 연결합니다.</p>
+          </article>
+          <article class="soft-card card-lift p-7" data-animate data-delay="4">
+            <span class="chip">실전</span>
+            <h3 class="mt-6 text-2xl font-black">내 업무에 맞춘 미니 프로젝트</h3>
+            <p class="mt-3 text-neutral-500">수강생 상황에 맞춰 한 가지 실제 자동화 또는 운영 페이지를 끝까지 만들어 봅니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="class-flow" class="surface py-20 md:py-24">
+      <div class="mx-auto grid max-w-6xl gap-10 px-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <div data-animate>
+          <p class="section-label">class hub</p>
+          <h2 class="headline mt-4 text-3xl md:text-4xl">무료·유료·예약확인을 한 곳에서 선택합니다.</h2>
+          <p class="mt-5 text-neutral-500">무료 강의는 편성 참고용 신청이고, 유료 강의는 승인 코드와 예약 확인으로 이어집니다. 상담은 강의 신청과 섞지 않고 별도 페이지에서 받습니다.</p>
+        </div>
+        <div class="grid gap-4 md:grid-cols-2">
+          <a class="soft-card card-lift p-6" href="https://apply.arsen-ai.com/frontend/join-free.html" data-animate data-delay="1"><span class="chip">무료</span><h3 class="mt-5 text-xl font-black">무료 강의 신청</h3><p class="mt-2 text-neutral-500">회차 예약 없이 지역, 가능 시간, 관심사를 남깁니다.</p><span class="mt-5 inline-flex font-black">바로 신청</span></a>
+          <a class="soft-card card-lift p-6" href="paid-class.html" data-animate data-delay="2"><span class="chip">유료</span><h3 class="mt-5 text-xl font-black">유료 실습 강의</h3><p class="mt-2 text-neutral-500">커리큘럼과 가격 기준을 확인한 뒤 정식 신청합니다.</p><span class="mt-5 inline-flex font-black">안내 보기</span></a>
+          <a class="soft-card card-lift p-6" href="https://apply.arsen-ai.com/frontend/status.html" data-animate data-delay="3"><span class="chip">확인</span><h3 class="mt-5 text-xl font-black">예약 확인</h3><p class="mt-2 text-neutral-500">승인 코드를 받은 분은 여기서 일정과 예약 상태를 확인합니다.</p><span class="mt-5 inline-flex font-black">예약 확인</span></a>
+          <a class="soft-card card-lift p-6" href="consulting.html" data-animate data-delay="4"><span class="chip">상담</span><h3 class="mt-5 text-xl font-black">상담 신청</h3><p class="mt-2 text-neutral-500">어떤 강의나 자동화가 맞는지 먼저 정리합니다.</p><span class="mt-5 inline-flex font-black">상담 신청</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 md:py-24">
+      <div class="mx-auto max-w-6xl px-5">
+        <div class="max-w-3xl" data-animate>
+          <p class="section-label">how it works</p>
+          <h2 class="headline mt-4 text-3xl md:text-4xl">신청 이후 흐름은 이렇게 나뉩니다.</h2>
+          <p class="mt-5 text-neutral-500">무료 강의와 유료 강의는 목적이 다르기 때문에 확인 방식도 다릅니다.</p>
+        </div>
+        <div class="mt-12 grid gap-5 lg:grid-cols-2">
+          <article class="soft-card p-7" data-animate data-delay="1">
+            <span class="chip">무료 강의</span>
+            <h3 class="mt-6 text-2xl font-black">정보를 남기면 다음 편성에 참고합니다.</h3>
+            <div class="mt-6 grid gap-4 text-neutral-500">
+              <p><strong class="text-neutral-900">01 신청</strong> 지역, 가능 시간, 관심 주제를 남깁니다.</p>
+              <p><strong class="text-neutral-900">02 편성</strong> 운영자가 신청 분포를 보고 날짜와 주제를 정합니다.</p>
+              <p><strong class="text-neutral-900">03 안내</strong> 확정된 무료 강의가 있으면 별도 안내합니다.</p>
+            </div>
+          </article>
+          <article class="soft-card p-7" data-animate data-delay="2">
+            <span class="chip">유료 강의</span>
+            <h3 class="mt-6 text-2xl font-black">승인 코드로 예약 상태를 확인합니다.</h3>
+            <div class="mt-6 grid gap-4 text-neutral-500">
+              <p><strong class="text-neutral-900">01 정식 신청</strong> 목표와 준비 상태를 자세히 남깁니다.</p>
+              <p><strong class="text-neutral-900">02 승인 코드</strong> 운영자가 확인 후 코드를 안내합니다.</p>
+              <p><strong class="text-neutral-900">03 예약 확인</strong> 코드로 로그인해 일정, 입금, 자리 상태를 봅니다.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 md:py-24">
+      <div class="mx-auto max-w-6xl px-5">
+        <div class="grid gap-10 lg:grid-cols-[1fr_420px]">
+          <div data-animate>
+            <p class="section-label">faq</p>
+            <h2 class="headline mt-4 text-3xl md:text-4xl">자주 묻는 질문</h2>
+          </div>
+          <div class="grid gap-3">
+            <div class="faq-item soft-card p-5 is-open">
+              <button class="flex w-full justify-between text-left font-black" type="button" data-faq-toggle aria-expanded="true">코딩을 몰라도 가능한가요?<span>+</span></button>
+              <p class="faq-answer mt-4 text-neutral-500">가능합니다. 코드를 외우는 강의가 아니라 도구를 활용해 업무 흐름을 만드는 강의입니다.</p>
+            </div>
+            <div class="faq-item soft-card p-5">
+              <button class="flex w-full justify-between text-left font-black" type="button" data-faq-toggle aria-expanded="false">노트북이 필요한가요?<span>+</span></button>
+              <p class="faq-answer mt-4 text-neutral-500">실습형 강의는 노트북 지참을 권장합니다. 상황에 따라 관람형으로도 참여할 수 있습니다.</p>
+            </div>
+            <div class="faq-item soft-card p-5">
+              <button class="flex w-full justify-between text-left font-black" type="button" data-faq-toggle aria-expanded="false">기업 교육도 가능한가요?<span>+</span></button>
+              <p class="faq-answer mt-4 text-neutral-500">가능합니다. 인원, 목표, 사용 도구를 확인한 뒤 맞춤형으로 제안합니다.</p>
+            </div>
           </div>
         </div>
-        <div id="sectionTabs" class="section-tabs" aria-label="자료 폴더"></div>
-        <div id="editRoot"></div>
-      </section>
+      </div>
+    </section>
 
-      <footer class="footer" role="contentinfo">
-        <span>준비물 확인이 끝나면 강의실에서 만나요.</span>
-        <span>문의는 위 1:1 문의 버튼 또는 정보 공유방을 이용해 주세요.</span>
-      </footer>
-    </main>
-  </div>
+    <section class="bg-neutral-950 py-20 text-white">
+      <div class="mx-auto max-w-6xl px-5 text-center" data-animate>
+        <p class="section-label">apply</p>
+        <h2 class="headline mx-auto mt-4 max-w-2xl text-3xl md:text-4xl">강의 방향을 먼저 정리해 드리겠습니다.</h2>
+        <div class="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+          <a class="btn-light" href="https://apply.arsen-ai.com/frontend/join-free.html">무료 강의 신청</a>
+          <a class="btn-ghost" href="https://apply.arsen-ai.com/frontend/status.html">예약 확인</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-  <script>
-	    var EDUCATION_PUBLIC_URL = 'https://arsen-ai.com/education.html';
-	    var EDUCATION_API_BASE = ['arsen-ai.com', 'www.arsen-ai.com'].indexOf(location.hostname) >= 0
-	      ? 'https://apply.arsen-ai.com'
-	      : '';
-	    var resources = [];
-		    var operatorMode = new URLSearchParams(location.search).has('edit') || location.hash.indexOf('edit') >= 0;
-		    var editing = operatorMode;
-		    var editorFilter = 'all';
-		    var editorSectionFilter = 'all';
-		    var collapsedSections = {};
-		    var lastSavedAt = '';
-	    var SECTION_HINTS = {
-	      '설치 링크': '공식 다운로드 페이지에서 직접 설치합니다. 가짜 사이트 주의.',
-	      '터미널 복붙': 'Mac 터미널을 켜고 복사 버튼으로 명령을 그대로 붙여 넣습니다.',
-	      '수업 프롬프트': '강의 중 각자 AI 도구에 붙여 넣고 사용할 실습 문장입니다.',
-	      '모델별 기본 설정': 'ChatGPT, Claude, Gemini에 미리 넣어두는 기본 지침입니다.',
-	      '업무 자동화 프롬프트': '수강생 업무를 자동화 후보와 실행 계획으로 바꾸는 프롬프트입니다.',
-	      '이미지 생성 프롬프트': '이미지 생성/수정 요청을 모델이 이해하기 쉬운 구조로 바꿉니다.',
-	      '검색/자료조사 프롬프트': '최신 정보와 출처 확인이 필요한 조사에 사용합니다.',
-	      '문서 정리 프롬프트': '문서, 표, 대화 내용을 근거 중심으로 요약합니다.',
-	      '수업 운영 프롬프트': '수강생별 컨설팅과 후속 액션 정리에 사용합니다.'
-	    };
-	    var SECTION_ORDER = ['설치 링크', '터미널 복붙', '수업 프롬프트', '모델별 기본 설정', '업무 자동화 프롬프트', '이미지 생성 프롬프트', '검색/자료조사 프롬프트', '문서 정리 프롬프트', '수업 운영 프롬프트'];
-	    var STATUS_LABELS = {
-	      official: '공식',
-	      ready: '준비됨',
-	      optional: '선택',
-	      template: '템플릿'
-	    };
-	    var fallbackResources = [
-	      {section:'설치 링크', title:'ChatGPT', status:'official', description:'수업 전 공식 OpenAI 페이지에서 설치합니다.', url:'https://openai.com/chatgpt/download/', copy_text:'', visible:true},
-	      {section:'설치 링크', title:'Claude', status:'official', description:'가짜 다운로드 사이트를 피하고 공식 Claude 다운로드만 사용합니다.', url:'https://claude.com/download', copy_text:'', visible:true},
-	      {section:'설치 링크', title:'Gemini', status:'official', description:'브라우저에서 Google Gemini를 열어 로그인합니다.', url:'https://gemini.google.com/', copy_text:'', visible:true},
-	      {section:'설치 링크', title:'Visual Studio Code', status:'official', description:'코드 편집이 필요한 실습용 설치 링크입니다.', url:'https://code.visualstudio.com/download', copy_text:'', visible:true},
-	      {section:'터미널 복붙', title:'Homebrew 설치', status:'optional', description:'Mac 터미널 실습이 필요한 사람만 진행합니다.', url:'https://docs.brew.sh/Installation.html', copy_text:'/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"', visible:true},
-	      {section:'수업 프롬프트', title:'업무 자동화 상담 시작', status:'ready', description:'각자 업무를 AI에게 설명할 때 쓰는 기본 문장입니다.', url:'', copy_text:'내 업무를 자동화하고 싶어. 내가 반복하는 작업은 다음과 같아:\n1. \n2. \n3. \n이 중에서 AI로 가장 먼저 자동화할 만한 일을 우선순위로 정리해줘.', visible:true}
-	    ];
-
-    function el(tag, className, text) {
-      var node = document.createElement(tag);
-      if (className) node.className = className;
-      if (text !== undefined && text !== null) node.textContent = text;
-      return node;
-    }
-
-    function toast(message, duration) {
-      var node = document.getElementById('toast');
-      node.textContent = message;
-      node.classList.add('show');
-      clearTimeout(toast._timer);
-      toast._timer = setTimeout(function(){ node.classList.remove('show'); }, duration || 2000);
-    }
-
-	    function normalize(items) {
-      if (!Array.isArray(items)) return fallbackResources.slice();
-      return items.filter(function(item){ return item && item.title; }).map(function(item){
-        return {
-          section: (item.section || '기타').toString(),
-          title: (item.title || '').toString(),
-	          status: (item.status || '').toString(),
-	          description: (item.description || '').toString(),
-	          url: (item.url || '').toString(),
-	          copy_text: (item.copy_text || '').toString(),
-	          visible: item.visible !== false,
-	          template_id: (item.template_id || '').toString()
-	        };
-	      });
-	    }
-
-		    function adminKeyInput() {
-		      return document.getElementById('adminKeyInput');
-		    }
-
-		    function getAdminKey() {
-		      var input = adminKeyInput();
-		      var inlineKey = input ? input.value.trim() : '';
-		      return inlineKey || sessionStorage.getItem('memberAdminKey') || localStorage.getItem('memberAdminKey') || '';
-		    }
-
-		    function updateAuthStatus(message) {
-		      var status = document.getElementById('authStatus');
-		      if (!status) return;
-		      if (message) {
-		        status.textContent = message;
-		        return;
-		      }
-		      status.textContent = getAdminKey()
-		        ? '비밀번호 적용됨. 숨김 템플릿까지 불러올 수 있습니다.'
-		        : '비밀번호를 적용하면 숨김 템플릿까지 불러옵니다.';
-		    }
-
-		    function ensureAdminKey() {
-		      var key = getAdminKey();
-		      if (key) {
-		        sessionStorage.setItem('memberAdminKey', key);
-		        updateAuthStatus();
-		        return key;
-		      }
-		      updateAuthStatus('저장하려면 관리자 비밀번호를 먼저 입력해 주세요.');
-		      toast('관리자 비밀번호를 먼저 입력해 주세요.', 3500);
-		      var input = adminKeyInput();
-		      if (input) input.focus();
-		      return '';
-		    }
-
-		    function saveAdminKey() {
-		      var key = getAdminKey();
-		      if (!key) {
-		        updateAuthStatus('입력된 비밀번호가 없습니다.');
-		        toast('관리자 비밀번호를 입력해 주세요.', 3000);
-		        return;
-		      }
-		      sessionStorage.setItem('memberAdminKey', key);
-		      updateAuthStatus('비밀번호 적용 중입니다. 숨김 자료를 다시 불러옵니다.');
-		      reloadResources();
-		    }
-
-		    function adminHeaders(extra) {
-		      var headers = Object.assign({}, extra || {});
-		      var key = getAdminKey();
-		      if (key) headers['X-Admin-Key'] = key;
-		      return headers;
-		    }
-
-	    function apiUrl(path) {
-	      return EDUCATION_API_BASE + path;
-	    }
-
-		    function reloadResources() {
-		      syncEditorRows();
-		      var hasAdminKey = operatorMode && !!getAdminKey();
-		      var url = hasAdminKey ? '/api/education?include_hidden=1' : '/api/education';
-		      fetch(apiUrl(url), {credentials: 'same-origin', headers: hasAdminKey ? adminHeaders() : {}})
-	        .then(function(res){ if (!res.ok) throw {status: res.status}; return res.json(); })
-	        .then(function(data){
-	          resources = normalize(data.resources);
-	          updateAuthStatus(hasAdminKey ? '비밀번호 적용됨. 숨김 템플릿까지 표시합니다.' : '');
-	          render();
-	        })
-	        .catch(function(err){
-	          if (err && (err.status === 401 || err.status === 403)) {
-	            sessionStorage.removeItem('memberAdminKey');
-	            updateAuthStatus('비밀번호가 맞지 않아 공개 자료만 표시합니다.');
-	          }
-	          resources = fallbackResources.slice();
-	          render();
-          var status = err && err.status;
-          var msg;
-          if (status === 401 || status === 403) {
-            msg = '편집 API 인증 필요 (' + status + '). 공개 페이지는 정상입니다. 대시보드 로그인 후 다시 열어 주세요.';
-          } else if (status === 404) {
-            msg = '교육 자료 API 경로를 찾을 수 없습니다 (404). 공개 페이지는 정상이며, 서버 설정을 확인해 주세요.';
-          } else if (status === 503 || status === 530) {
-            msg = '서버 일시 오류 (' + status + '). 공개 페이지는 정상이며, 잠시 후 새로고침해 주세요.';
-          } else if (typeof navigator !== 'undefined' && !navigator.onLine) {
-            msg = '네트워크 연결이 끊겨 있습니다. 연결 후 새로고침해 주세요.';
-          } else {
-            msg = '교육 자료를 불러오지 못해 기본 자료를 표시합니다.';
-          }
-          toast(msg, status ? 5000 : 2500);
-        });
-    }
-
-	    function render() {
-	      document.body.classList.toggle('operator-mode', operatorMode);
-	      document.body.classList.toggle('editing', editing);
-	      document.getElementById('editToggle').textContent = editing ? '수강생 미리보기' : '자료 편집';
-	      updateAuthStatus();
-	      renderStudent();
-		      renderEditor();
-		    }
-
-		    function visibleResources() {
-		      return resources.filter(function(item){ return item.visible !== false; });
-		    }
-
-		    function filteredEditorResources(ignoreSection) {
-		      return resources.map(function(item, idx){ return {item:item, idx:idx}; }).filter(function(entry){
-		        if (!ignoreSection && editorSectionFilter !== 'all' && (entry.item.section || '기타') !== editorSectionFilter) return false;
-		        if (editorFilter === 'visible') return entry.item.visible !== false;
-		        if (editorFilter === 'hidden') return entry.item.visible === false;
-		        return true;
-		      });
-		    }
-
-		    function setEditorFilter(value) {
-		      syncEditorRows();
-		      editorFilter = value || 'all';
-		      renderEditor();
-		    }
-
-		    function setEditorSectionFilter(value) {
-		      syncEditorRows();
-		      editorSectionFilter = value || 'all';
-		      renderEditor();
-		    }
-
-		    function orderedSectionNames(names) {
-		      var seen = {};
-		      names.forEach(function(name){ seen[name || '기타'] = true; });
-		      var ordered = [];
-		      SECTION_ORDER.forEach(function(name){
-		        if (seen[name]) {
-		          ordered.push(name);
-		          delete seen[name];
-		        }
-		      });
-		      Object.keys(seen).sort(function(a, b){ return a.localeCompare(b, 'ko'); }).forEach(function(name){
-		        ordered.push(name);
-		      });
-		      return ordered;
-		    }
-
-		    function editorSectionNames() {
-		      var entries = filteredEditorResources(true);
-		      return orderedSectionNames(entries.map(function(entry){ return entry.item.section || '기타'; }));
-		    }
-
-		    function renderEditorTabs() {
-		      var root = document.getElementById('sectionTabs');
-		      if (!root) return;
-		      root.innerHTML = '';
-		      var names = editorSectionNames();
-		      if (editorSectionFilter !== 'all' && names.indexOf(editorSectionFilter) < 0) {
-		        editorSectionFilter = 'all';
-		      }
-		      function addTab(label, value, count) {
-		        var btn = el('button', 'section-tab' + (editorSectionFilter === value ? ' active' : ''), label + ' ' + count);
-		        btn.type = 'button';
-		        btn.onclick = function(){ setEditorSectionFilter(value); };
-		        root.appendChild(btn);
-		      }
-		      addTab('전체', 'all', filteredEditorResources(true).length);
-		      names.forEach(function(name){
-		        var count = filteredEditorResources(true).filter(function(entry){ return (entry.item.section || '기타') === name; }).length;
-		        addTab(name, name, count);
-		      });
-		    }
-
-		    function groupedEditorEntries(entries) {
-		      var groups = {};
-		      entries.forEach(function(entry){
-		        var key = entry.item.section || '기타';
-		        if (!groups[key]) groups[key] = [];
-		        groups[key].push(entry);
-		      });
-		      return {groups: groups, names: orderedSectionNames(Object.keys(groups))};
-		    }
-
-		    function toggleSection(sectionName) {
-		      syncEditorRows();
-		      collapsedSections[sectionName] = !collapsedSections[sectionName];
-		      renderEditor();
-		    }
-
-			    function groupedResources(list) {
-	      var groups = {};
-	      list.forEach(function(item){
-        var key = item.section || '기타';
-        if (!groups[key]) groups[key] = [];
-        groups[key].push(item);
-      });
-      var ordered = {};
-      orderedSectionNames(Object.keys(groups)).forEach(function(name){
-        ordered[name] = groups[name];
-      });
-      return ordered;
-    }
-
-	    function renderStudent() {
-	      var root = document.getElementById('resourceRoot');
-	      root.innerHTML = '';
-	      root.className = '';
-	      var publicResources = visibleResources();
-	      if (!publicResources.length) {
-	        root.className = 'empty';
-	        root.textContent = resources.length ? '현재 공개로 켜둔 교육 자료가 없습니다. 운영자 편집에서 필요한 자료를 공개로 바꿔 주세요.' : '아직 등록된 교육 자료가 없습니다. 운영자가 자료를 추가하면 여기에 표시됩니다.';
-	        return;
-	      }
-	      var groups = groupedResources(publicResources);
-      Object.keys(groups).forEach(function(sectionName){
-        var section = el('section', 'section');
-        var head = el('div', 'section-head');
-        var titleWrap = el('div', 'section-title-wrap');
-        titleWrap.appendChild(el('div', 'section-title', sectionName));
-        if (SECTION_HINTS[sectionName]) {
-          titleWrap.appendChild(el('span', 'section-hint', SECTION_HINTS[sectionName]));
-        }
-        head.appendChild(titleWrap);
-        head.appendChild(el('div', 'section-count', groups[sectionName].length + '개 자료'));
-        section.appendChild(head);
-
-        var grid = el('div', 'grid');
-        groups[sectionName].forEach(function(item){
-          grid.appendChild(resourceCard(item));
-        });
-        section.appendChild(grid);
-        root.appendChild(section);
-      });
-    }
-
-    function statusLabel(raw) {
-      var key = (raw || '').toLowerCase();
-      return STATUS_LABELS[key] || raw || '준비됨';
-    }
-
-    function resourceCard(item) {
-      var card = el('article', 'card');
-      var head = el('div', 'card-head');
-      head.appendChild(el('div', 'card-title', item.title));
-      var statusKey = (item.status || '').toLowerCase();
-      head.appendChild(el('span', 'status ' + statusKey, statusLabel(item.status)));
-      card.appendChild(head);
-      if (item.description) card.appendChild(el('div', 'desc', item.description));
-      if (item.copy_text) {
-        var wrap = el('div', 'copy-wrap');
-        wrap.appendChild(el('div', 'copy-label', '복사할 문장'));
-        wrap.appendChild(el('pre', 'copy', item.copy_text));
-        card.appendChild(wrap);
-      }
-      var actions = el('div', 'actions');
-      if (item.url) {
-        var linkBtn = el('button', '', '링크 열기');
-        linkBtn.type = 'button';
-        linkBtn.setAttribute('aria-label', item.title + ' 공식 페이지 열기');
-        linkBtn.onclick = function(){ openLink(item.url); };
-        actions.appendChild(linkBtn);
-      }
-      if (item.copy_text || item.url) {
-        var copyBtn = el('button', 'btn-primary', item.copy_text ? '문장 복사' : '주소 복사');
-        copyBtn.type = 'button';
-        copyBtn.setAttribute('aria-label', item.title + ' ' + (item.copy_text ? '실습 문장' : '주소') + ' 복사');
-        copyBtn.onclick = function(){ copyText(item.copy_text || item.url); };
-        actions.appendChild(copyBtn);
-      }
-      if (actions.childNodes.length) card.appendChild(actions);
-      return card;
-    }
-
-			    function renderEditor() {
-			      var root = document.getElementById('editRoot');
-			      root.innerHTML = '';
-		      renderEditorTabs();
-			      var summary = document.getElementById('editSummary');
-			      var visibleCount = visibleResources().length;
-		      var filtered = filteredEditorResources();
-		      var filterLabel = editorFilter === 'hidden' ? '숨김만' : editorFilter === 'visible' ? '공개만' : '전체';
-		      var sectionLabel = editorSectionFilter === 'all' ? '전체 폴더' : editorSectionFilter;
-		      var savedLabel = lastSavedAt ? ' · 최근 저장 ' + lastSavedAt : '';
-			      if (summary) summary.textContent = '공개 ' + visibleCount + '개 · 숨김 ' + (resources.length - visibleCount) + '개 · ' + sectionLabel + ' / ' + filterLabel + ' ' + filtered.length + '개 표시 중입니다.' + savedLabel;
-		      var filterNode = document.getElementById('editFilter');
-		      if (filterNode) filterNode.value = editorFilter;
-		      if (!filtered.length) {
-		        root.appendChild(el('div', 'empty', '현재 필터에 표시할 자료가 없습니다.'));
-		        return;
-		      }
-		      var grouped = groupedEditorEntries(filtered);
-		      grouped.names.forEach(function(sectionName){
-		        var entries = grouped.groups[sectionName] || [];
-		        var publicCount = entries.filter(function(entry){ return entry.item.visible !== false; }).length;
-		        var hiddenCount = entries.length - publicCount;
-		        var isCollapsed = collapsedSections[sectionName] === true;
-		        var section = el('section', 'edit-section');
-		        var head = el('button', 'edit-section-head');
-		        head.type = 'button';
-		        head.onclick = function(){ toggleSection(sectionName); };
-		        head.appendChild(el('span', 'edit-section-title', sectionName));
-		        head.appendChild(el('span', 'edit-section-meta', entries.length + '개 · 공개 ' + publicCount + ' · 숨김 ' + hiddenCount + ' · ' + (isCollapsed ? '열기' : '접기')));
-		        section.appendChild(head);
-		        if (!isCollapsed) {
-		          var body = el('div', 'edit-section-body');
-		          entries.forEach(function(entry){
-		            body.appendChild(editRow(entry.item, entry.idx));
-		          });
-		          section.appendChild(body);
-		        }
-		        root.appendChild(section);
-		      });
-			    }
-
-	    function editRow(item, idx) {
-	      var row = el('div', 'edit-row');
-	      if (item.visible === false) row.classList.add('hidden-resource');
-	      row.dataset.index = String(idx);
-	      var rowHead = el('div', 'edit-row-head');
-	      rowHead.appendChild(el('div', 'edit-row-title', (idx + 1) + '. ' + (item.title || '새 자료')));
-	      rowHead.appendChild(el('span', 'visibility-pill', item.visible === false ? '숨김 보관' : '공개 중'));
-	      row.appendChild(rowHead);
-	      var grid = el('div', 'edit-grid');
-      [
-        ['section', '섹션 (예: 설치 링크)', item.section],
-        ['title', '제목', item.title],
-        ['status', '상태 (official / optional / ready)', item.status],
-        ['url', '링크 URL', item.url]
-      ].forEach(function(field){
-        var input = document.createElement('input');
-        input.placeholder = field[1];
-        input.value = field[2] || '';
-        input.dataset.field = field[0];
-        input.setAttribute('aria-label', field[1]);
-        grid.appendChild(input);
-      });
-      row.appendChild(grid);
-      var desc = document.createElement('input');
-      desc.placeholder = '한 줄 설명';
-      desc.value = item.description || '';
-      desc.dataset.field = 'description';
-      desc.style.marginTop = '8px';
-      desc.setAttribute('aria-label', '한 줄 설명');
-      row.appendChild(desc);
-      var copy = document.createElement('textarea');
-      copy.placeholder = '수강생이 복사할 문장이나 명령어 (선택)';
-      copy.value = item.copy_text || '';
-      copy.dataset.field = 'copy_text';
-      copy.setAttribute('aria-label', '복사할 문장 또는 명령어');
-      row.appendChild(copy);
-	      var actions = el('div', 'edit-actions');
-	      var toggle = el('button', 'btn-ghost', item.visible === false ? '공개로 전환' : '숨김 보관');
-	      toggle.type = 'button';
-	      toggle.onclick = function(){
-	        syncEditorRows();
-	        resources[idx].visible = resources[idx].visible === false;
-	        renderEditor();
-	      };
-	      actions.appendChild(toggle);
-	      var duplicate = el('button', 'btn-ghost', '복제');
-	      duplicate.type = 'button';
-		      duplicate.onclick = function(){
-		        syncEditorRows();
-		        var copy = Object.assign({}, resources[idx]);
-	        delete copy.template_id;
-		        copy.title = copy.title ? copy.title + ' 복사본' : '새 자료 복사본';
-		        resources.splice(idx + 1, 0, copy);
-		        renderEditor();
-	      };
-	      actions.appendChild(duplicate);
-	      var up = el('button', 'btn-ghost', '위로');
-	      up.type = 'button';
-	      up.disabled = idx === 0;
-	      up.onclick = function(){
-	        syncEditorRows();
-	        var current = resources.splice(idx, 1)[0];
-	        resources.splice(idx - 1, 0, current);
-	        renderEditor();
-	      };
-	      actions.appendChild(up);
-	      var down = el('button', 'btn-ghost', '아래로');
-	      down.type = 'button';
-	      down.disabled = idx === resources.length - 1;
-	      down.onclick = function(){
-	        syncEditorRows();
-	        var current = resources.splice(idx, 1)[0];
-	        resources.splice(idx + 1, 0, current);
-	        renderEditor();
-	      };
-	      actions.appendChild(down);
-	      var del = el('button', 'btn-ghost danger', '영구 삭제');
-	      del.type = 'button';
-	      del.onclick = function(){
-	        if (!confirm('이 자료를 완전히 삭제할까요? 나중에 쓸 가능성이 있으면 “숨김 보관”을 사용해 주세요.')) return;
-	        syncEditorRows();
-	        resources.splice(idx, 1);
-	        renderEditor();
-	      };
-      actions.appendChild(del);
-      row.appendChild(actions);
-	      return row;
-	    }
-
-	    function collectOneRow(row) {
-	      function value(name) {
-	        var node = row.querySelector('[data-field="' + name + '"]');
-	        return node ? node.value.trim() : '';
-	      }
-	      var index = Number(row.dataset.index);
-	      var current = resources[index] || {};
-	      return {
-	        section: value('section') || '기타',
-	        title: value('title'),
-		        status: value('status'),
-		        description: value('description'),
-		        url: value('url'),
-		        copy_text: value('copy_text'),
-		        visible: current.visible !== false,
-		        template_id: current.template_id || ''
-		      };
-		    }
-
-		    function collectEditorRows(keepBlank) {
-	      return resources.filter(function(item){ return item.title || keepBlank; });
-		    }
-
-		    function syncEditorRows() {
-	      document.querySelectorAll('.edit-row').forEach(function(row){
-	        var index = Number(row.dataset.index);
-	        if (!Number.isNaN(index) && resources[index]) resources[index] = collectOneRow(row);
-	      });
-		    }
-
-		    function collectEditor() {
-	      syncEditorRows();
-		      return collectEditorRows(false);
-		    }
-
-	    function addEditRow() {
-	      resources.push({section:'기타', title:'', status:'ready', description:'', url:'', copy_text:'', visible:true});
-	      editorFilter = 'all';
-	      editorSectionFilter = 'all';
-	      collapsedSections['기타'] = false;
-      renderEditor();
-      var rows = document.querySelectorAll('.edit-row');
-      var last = rows[rows.length - 1];
-      if (last) {
-        last.scrollIntoView({behavior:'smooth', block:'center'});
-        var firstInput = last.querySelector('input');
-        if (firstInput) firstInput.focus();
-      }
-    }
-
-    function saveResources() {
-      var next = collectEditor();
-      if (!next.length) {
-        toast('저장할 자료가 없습니다. 제목이 들어간 자료가 한 개 이상 필요합니다.');
-        return;
-      }
-      if (!ensureAdminKey()) return;
-	      fetch(apiUrl('/api/education'), {
-	        method: 'PUT',
-	        credentials: 'same-origin',
-	        headers: adminHeaders({'Content-Type': 'application/json'}),
-	        body: JSON.stringify({resources: next})
-      }).then(function(res){
-        if (!res.ok) throw {status: res.status};
-        return res.json();
-      }).then(function(data){
-        resources = normalize(data.resources);
-        editing = operatorMode;
-        lastSavedAt = new Date().toLocaleTimeString('ko-KR', {hour:'2-digit', minute:'2-digit'});
-        render();
-        toast('교육 자료를 저장했습니다. 공개 화면 새로고침 시 반영됩니다.');
-      }).catch(function(err){
-        var status = err && err.status;
-        if (status === 401 || status === 403) {
-          sessionStorage.removeItem('memberAdminKey');
-          updateAuthStatus('비밀번호가 맞지 않습니다. 다시 입력해 주세요.');
-        }
-        var msg;
-        if (status === 401 || status === 403) {
-          msg = '저장 실패 (' + status + '): 편집 API 인증이 필요합니다. 공개 페이지는 정상이며, 대시보드 로그인 후 다시 시도해 주세요.';
-        } else if (status === 404) {
-          msg = '저장 실패 (404): API 경로를 찾을 수 없습니다. 공개 페이지는 정상이며, 서버 설정을 확인해 주세요.';
-        } else if (status === 503 || status === 530) {
-          msg = '저장 실패 (' + status + '): 서버 일시 오류입니다. 공개 페이지는 정상이며, 잠시 후 다시 시도해 주세요.';
-        } else if (typeof navigator !== 'undefined' && !navigator.onLine) {
-          msg = '저장 실패: 네트워크 연결이 끊겨 있습니다.';
-        } else {
-          msg = '저장 실패: 대시보드 인증 또는 서버 상태를 확인해 주세요.';
-        }
-        toast(msg, 5000);
-      });
-    }
-
-    function toggleEdit(force) {
-      if (!operatorMode) return;
-      editing = typeof force === 'boolean' ? force : !editing;
-      render();
-    }
-
-    function scrollToResources() {
-      var node = document.getElementById('resourceRoot');
-      if (node) node.scrollIntoView({behavior:'smooth', block:'start'});
-    }
-
-    function openLink(url) {
-      if (!url) return;
-      var win = window.open(url, '_blank', 'noopener,noreferrer');
-      if (!win) {
-        copyText(url);
-        toast('새 탭이 차단되어 주소를 복사했습니다.');
-      }
-    }
-
-    function copyText(text) {
-      if (!text) return;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(function(){
-          toast('복사했습니다.');
-        }).catch(function(){
-          fallbackCopy(text);
-        });
-      } else {
-        fallbackCopy(text);
-      }
-    }
-
-    function fallbackCopy(text) {
-      try {
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.left = '-9999px';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        toast('복사했습니다.');
-      } catch (err) {
-        toast('복사하지 못했습니다. 직접 길게 눌러 복사해 주세요.');
-      }
-    }
-
-    function copyPageLink() {
-      copyText(EDUCATION_PUBLIC_URL);
-    }
-
-    reloadResources();
-  </script>
+  <footer class="border-t border-neutral-200 bg-white py-12">
+    <div class="mx-auto grid max-w-6xl gap-8 px-5 md:grid-cols-3">
+      <div><a class="site-logo" href="index.html"><span class="site-logo-mark">AI</span><span>ARSEN AI</span></a><p class="mt-4 text-sm text-neutral-500">AI 교육과 자동화 운영을 만듭니다.</p></div>
+      <div class="grid gap-2 text-sm font-semibold text-neutral-500"><a href="education.html">강의/교육</a><a href="store.html">스토어</a><a href="cases.html">사례</a><a href="https://apply.arsen-ai.com/frontend/status.html">예약 확인</a><a href="contact.html">채널</a></div>
+      <div class="text-sm text-neutral-500"><p class="font-bold text-neutral-900">채널</p><div class="mt-3 flex flex-wrap gap-2"><a class="btn-outline" href="https://www.youtube.com/@Arsene-ai">유튜브</a><a class="btn-outline" href="https://open.kakao.com/o/s88zv6pf">카카오톡</a><a class="btn-outline" href="https://open.kakao.com/o/gm9tRoJh">정보방</a></div></div>
+    </div>
+  </footer>
+  <script src="assets/site.js"></script>
 </body>
 </html>
