@@ -1,7 +1,7 @@
 (() => {
   const THEME_QUERY = "theme";
   const DEFAULT_THEME_ID = "arsen-modern";
-  const THEME_ASSET_VERSION = "20260614-modern-public";
+  const THEME_ASSET_VERSION = "20260618-newsletter-theme";
   const THEMES = [
     {
       id: "legacy",

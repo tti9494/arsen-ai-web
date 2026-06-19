@@ -102,24 +102,86 @@
     });
   });
 
-  document.querySelectorAll("[data-mock-form]").forEach((form) => {
-    form.addEventListener("submit", (event) => {
+  const showFormMessage = (form, selector, message) => {
+    const target = form.querySelector(selector);
+    if (!target) return;
+    if (message) target.textContent = message;
+    target.classList.remove("hidden");
+  };
+
+  const hideFormMessage = (form, selector) => {
+    const target = form.querySelector(selector);
+    if (target) target.classList.add("hidden");
+  };
+
+  const formPayload = (form) => {
+    const payload = Object.fromEntries(new FormData(form).entries());
+    if (form.dataset.source) payload.source = form.dataset.source;
+    if (form.dataset.topic) payload.topic = form.dataset.topic;
+    if (form.dataset.productInterest) payload.product_interest = form.dataset.productInterest;
+    const contact = String(payload.contact || "").trim();
+    if (contact) {
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+      const digits = contact.replace(/[^\d]/g, "");
+      if (payload.source === "home_newsletter") {
+        payload.phone = contact;
+        payload.contact_type = "phone";
+        payload.topic = `${payload.topic || "소식 받기"} · 번호`;
+        payload.product_interest = "메인 소식 받기 · 번호";
+      } else if (isEmail) {
+        payload.email = contact;
+        payload.contact_type = "email";
+      } else if (digits.length >= 7) {
+        payload.phone = contact;
+        payload.contact_type = "phone";
+      }
+    }
+    payload.page_url = window.location.href;
+    payload.referrer = document.referrer || "";
+    payload.consent_privacy = payload.consent_privacy || true;
+    return payload;
+  };
+
+  document.querySelectorAll("[data-consultation-form]").forEach((form) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const button = form.querySelector("button[type='submit']");
-      const success = form.querySelector("[data-success]");
       const original = button ? button.textContent : "";
+      hideFormMessage(form, "[data-success]");
+      hideFormMessage(form, "[data-error]");
       if (button) {
         button.disabled = true;
         button.textContent = "접수 중...";
       }
-      setTimeout(() => {
-        if (success) success.classList.remove("hidden");
+      try {
+        const endpoint = form.dataset.endpoint || "https://apply.arsen-ai.com/api/consultations";
+        const payload = formPayload(form);
+        if (form.dataset.source === "home_newsletter") {
+          const name = String(payload.name || "").trim();
+          const digits = String(payload.phone || payload.contact || "").replace(/[^\d]/g, "");
+          if (!name) throw new Error("이름을 입력해주세요.");
+          if (digits.length < 7) throw new Error("전화번호를 입력해주세요.");
+        }
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || data.ok === false) {
+          throw new Error(data.detail || data.message || "상담 접수에 실패했습니다.");
+        }
+        showFormMessage(form, "[data-success]", data.message || "상담 신청이 접수되었습니다. 확인 후 연락드리겠습니다.");
+        form.reset();
+      } catch (error) {
+        showFormMessage(form, "[data-error]", error.message || "상담 접수 중 오류가 발생했습니다.");
+      } finally {
         if (button) {
           button.textContent = original;
           button.disabled = false;
         }
-        form.reset();
-      }, 650);
+      }
     });
   });
+
 })();

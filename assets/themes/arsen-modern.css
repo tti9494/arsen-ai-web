@@ -172,7 +172,7 @@ dd,
   background:
     radial-gradient(circle at 85% 8%, rgba(80, 128, 190, 0.28), transparent 18%),
     linear-gradient(112deg, rgba(13, 22, 32, 0.68), rgba(24, 47, 74, 0.82) 46%, rgba(16, 26, 58, 0.94)),
-    url("yoonbot-hero.png") center / cover no-repeat;
+    url("../yoonbot-hero.png") center / cover no-repeat;
   color: #fff;
 }
 
