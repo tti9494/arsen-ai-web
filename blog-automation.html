@@ -91,10 +91,12 @@
       backdrop-filter: blur(16px) saturate(180%);
       -webkit-backdrop-filter: blur(16px) saturate(180%);
       border-bottom: 1px solid var(--line);
+      line-height: 24px;
     }
     .nav-inner {
       display: flex; align-items: center; justify-content: space-between;
       height: 64px; gap: 20px; padding: 0;
+      line-height: 24px;
     }
     .site-logo {
       display: inline-flex; align-items: center; gap: 10px;
@@ -119,27 +121,30 @@
       line-height: 17.28px;
       -webkit-font-smoothing: auto;
     }
-    .nav-menu { display: flex; align-items: center; gap: 20px; }
-    .nav-links { display: flex; align-items: center; gap: 20px; list-style: none; min-width: 0; }
+    .nav-menu { display: flex; align-items: center; gap: 20px; line-height: 24px; -webkit-font-smoothing: auto; }
+    .nav-links { display: flex; align-items: center; gap: 20px; list-style: none; min-width: 0; height: 20px; line-height: 20px; -webkit-font-smoothing: auto; }
     .nav-links a {
       flex: 0 0 auto;
       display: inline-flex;
       align-items: center;
-      min-height: 20px;
+      height: 20px;
       white-space: nowrap;
       font-size: 14px;
       line-height: 20px;
       font-weight: 600;
       color: #737373;
       transition: color .15s;
+      -webkit-font-smoothing: auto;
     }
     .nav-links a:hover { color: var(--ink); }
-    .nav-cta { display: flex; gap: 9px; }
+    .nav-cta { display: flex; gap: 9px; line-height: 24px; -webkit-font-smoothing: auto; }
     .nav-cta .btn-primary {
       min-height: 44px;
       border-radius: 9999px;
       padding: 0 20px;
       font-weight: 800;
+      line-height: 20px;
+      -webkit-font-smoothing: auto;
     }
     .menu-btn {
       display: none;
@@ -153,6 +158,7 @@
       color: var(--ink);
       font-size: 14px;
       font-weight: 800;
+      -webkit-font-smoothing: auto;
     }
     .mobile-menu {
       display: none;
