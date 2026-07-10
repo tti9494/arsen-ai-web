@@ -45,6 +45,12 @@
     );
 
     document.querySelectorAll("[data-animate]").forEach((el) => revealObserver.observe(el));
+    window.setTimeout(() => {
+      document.querySelectorAll("[data-animate]:not(.is-visible)").forEach((el) => {
+        el.classList.add("is-visible");
+        revealObserver.unobserve(el);
+      });
+    }, 2500);
   } else {
     document.querySelectorAll("[data-animate]").forEach((el) => {
       el.style.opacity = "1";

@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>아르센 블로그 자동화 — AI 콘텐츠 운영 솔루션</title>
   <meta name="description" content="매일 쌓이는 콘텐츠 부담을 AI가 대신합니다. 아르센 블로그 자동화로 기획·초안·발행까지 한 흐름으로.">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css">
   <style>
     /* ─── 디자인 토큰 ─── */
     :root {
@@ -25,7 +27,7 @@
       --shadow:    0 24px 72px rgba(15,23,42,.12);
       --radius:    14px;
       --radius-sm: 8px;
-      --font: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+      --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
     }
 
     /* ─── 기본 리셋 ─── */
@@ -47,8 +49,9 @@
 
     /* ─── 레이아웃 컨테이너 ─── */
     .wrap {
-      width: min(1120px, calc(100vw - 32px));
+      width: min(1152px, 100%);
       margin: 0 auto;
+      padding: 0 20px;
     }
 
     /* ─── 공통 버튼 ─── */
@@ -83,29 +86,104 @@
 
     /* ─── ① NAV ─── */
     nav {
-      position: sticky; top: 0; z-index: 90;
+      position: fixed; inset: 0 0 auto; z-index: 90;
       background: rgba(255,255,255,.86);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
       border-bottom: 1px solid var(--line);
     }
     .nav-inner {
       display: flex; align-items: center; justify-content: space-between;
-      gap: 16px; padding: 14px 0;
+      height: 64px; gap: 20px; padding: 0;
     }
-    .nav-logo {
-      font-size: 19px; font-weight: 800; letter-spacing: -.02em;
-      background: linear-gradient(90deg, var(--accent-2), var(--accent));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    .site-logo {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-weight: 900; letter-spacing: 0;
+      line-height: 24px;
+      white-space: nowrap;
     }
-    .nav-links { display: flex; gap: 18px; list-style: none; }
-    .nav-links a { font-size: 13px; color: var(--muted); transition: color .15s; }
+    .site-logo > span:last-child { line-height: 24px; }
+    .site-logo-mark {
+      width: 28px; height: 28px; display: inline-grid; place-items: center;
+      border-radius: 9px; color: #fff;
+      background:
+        linear-gradient(135deg, rgba(53, 95, 146, 0.96), rgba(15, 143, 98, 0.88)),
+        #0f172a;
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18);
+      font-size: 0.72rem;
+      font-weight: 900;
+      line-height: 17.28px;
+    }
+    .nav-menu { display: flex; align-items: center; gap: 20px; }
+    .nav-links { display: flex; align-items: center; gap: 20px; list-style: none; min-width: 0; }
+    .nav-links a {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      min-height: 20px;
+      white-space: nowrap;
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 600;
+      color: #737373;
+      transition: color .15s;
+    }
     .nav-links a:hover { color: var(--ink); }
     .nav-cta { display: flex; gap: 9px; }
-    @media(max-width: 720px) { .nav-links { display: none; } }
+    .nav-cta .btn-primary {
+      min-height: 44px;
+      border-radius: 9999px;
+      padding: 0 20px;
+      font-weight: 800;
+    }
+    .menu-btn {
+      display: none;
+      min-height: 38px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: 9999px;
+      background: transparent;
+      padding: 0 16px;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .mobile-menu {
+      display: none;
+      margin: 0 -20px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+      padding: 16px 20px;
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu-inner {
+      display: grid;
+      gap: 12px;
+      color: #344054;
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .mobile-pill {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      background: #0a0a0a;
+      color: #fff;
+      padding: 0 20px;
+      font-weight: 800;
+    }
+    @media(max-width: 900px) {
+      .nav-inner { flex-wrap: wrap; height: auto; min-height: 64px; padding: 12px 0; }
+      .nav-menu { display: none; }
+      .menu-btn { display: inline-flex; }
+    }
 
     /* ─── ② HERO ─── */
     .hero {
-      padding: 88px 0 80px;
+      padding: 152px 0 80px;
       background:
         radial-gradient(circle at 12% 0%, rgba(53,95,146,.12) 0%, transparent 36%),
         radial-gradient(circle at 86% 5%, rgba(15,143,98,.11) 0%, transparent 32%),
@@ -648,9 +726,9 @@
     /* ─── 반응형 ─── */
     @media(max-width: 520px) {
       body { word-break: normal; }
-      .hero { padding: 60px 0 56px; }
+      .hero { padding: 148px 0 56px; }
       .section { padding: 52px 0; }
-      .wrap { width: calc(100vw - 32px); }
+      .wrap { width: 100%; padding: 0 16px; }
       .pricing-grid { grid-template-columns: 1fr; }
       .nav-cta { display: none; }
       .hero h1 { max-width: 320px; margin-left: auto; margin-right: auto; font-size: 34px; line-height: 1.14; overflow-wrap: anywhere; }
@@ -690,20 +768,33 @@
 <nav>
   <div class="wrap">
     <div class="nav-inner">
-      <a class="nav-logo" href="index.html" aria-label="ARSEN AI 홈">ARSEN AI</a>
-      <ul class="nav-links">
-        <li><a href="#problem">문제 제기</a></li>
-        <li><a href="#how">작동 방식</a></li>
-        <li><a href="#beginner">처음 시작</a></li>
-        <li><a href="#programs">프로그램</a></li>
-        <li><a href="#pricing">요금제</a></li>
-        <li><a href="#download-security">보안 상태</a></li>
-        <li><a href="#launcher">런처 안내</a></li>
-        <li><a href="#faq">FAQ</a></li>
-      </ul>
-      <div class="nav-cta">
-        <a href="#pricing" class="btn btn-outline">요금제 보기</a>
-        <a href="contact.html" class="btn btn-primary">체험 문의</a>
+      <a class="site-logo" href="index.html" aria-label="ARSEN AI 홈"><span class="site-logo-mark">AI</span><span>ARSEN AI</span></a>
+      <div class="nav-menu">
+        <ul class="nav-links">
+          <li><a href="education.html">강의/교육</a></li>
+          <li><a href="store.html">스토어</a></li>
+          <li><a href="blog-automation.html">블로그 자동화</a></li>
+          <li><a href="cases.html">사례</a></li>
+          <li><a href="https://apply.arsen-ai.com/frontend/status.html">예약 확인</a></li>
+          <li><a href="https://apply.arsen-ai.com/frontend/study.html">스터디</a></li>
+          <li><a href="contact.html">채널</a></li>
+        </ul>
+        <div class="nav-cta">
+          <a href="consulting.html" class="btn btn-primary">상담 신청</a>
+        </div>
+      </div>
+      <button id="menuBtn" class="menu-btn" type="button" aria-label="메뉴 열기" aria-expanded="false">메뉴</button>
+    </div>
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-inner">
+        <a href="education.html">강의/교육</a>
+        <a href="store.html">스토어</a>
+        <a href="blog-automation.html">블로그 자동화</a>
+        <a href="cases.html">사례</a>
+        <a href="https://apply.arsen-ai.com/frontend/status.html">예약 확인</a>
+        <a href="https://apply.arsen-ai.com/frontend/study.html">스터디</a>
+        <a href="contact.html">채널</a>
+        <a class="mobile-pill" href="consulting.html">상담 신청</a>
       </div>
     </div>
   </div>
@@ -1561,6 +1652,7 @@
         <li><a href="contact.html">이용 문의</a></li>
         <li><a href="contact.html">개인정보 문의</a></li>
         <li><a href="store.html">스토어</a></li>
+        <li><a href="legal-checklist.html">법무 체크</a></li>
         <li><a href="#notices">공지사항</a></li>
       </ul>
       <span class="footer-copy">© 2026 Arsen AI. All rights reserved.</span>
@@ -1569,6 +1661,16 @@
 </footer>
 
 <script>
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => {
+      const open = !mobileMenu.classList.contains('open');
+      mobileMenu.classList.toggle('open', open);
+      menuBtn.setAttribute('aria-expanded', String(open));
+    });
+  }
+
   /* FAQ 아코디언 */
   document.querySelectorAll('.faq-q').forEach(q => {
     q.addEventListener('click', () => {
