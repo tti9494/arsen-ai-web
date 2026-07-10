@@ -100,9 +100,13 @@
       display: inline-flex; align-items: center; gap: 10px;
       font-weight: 900; letter-spacing: 0;
       line-height: 24px;
+      -webkit-font-smoothing: auto;
       white-space: nowrap;
     }
-    .site-logo > span:last-child { line-height: 24px; }
+    .site-logo > span:last-child {
+      line-height: 24px;
+      -webkit-font-smoothing: auto;
+    }
     .site-logo-mark {
       width: 28px; height: 28px; display: inline-grid; place-items: center;
       border-radius: 9px; color: #fff;
@@ -113,6 +117,7 @@
       font-size: 0.72rem;
       font-weight: 900;
       line-height: 17.28px;
+      -webkit-font-smoothing: auto;
     }
     .nav-menu { display: flex; align-items: center; gap: 20px; }
     .nav-links { display: flex; align-items: center; gap: 20px; list-style: none; min-width: 0; }
