@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>수강생 AI 명함 - ARSEN AI</title>
+  <meta name="description" content="AI 결과물 제작 초급 4주반에서 만든 이미지, 소개글, 쇼츠 아이디어를 개인 명함 웹페이지 형태로 정리한 가상 예시 공간입니다.">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link data-arsen-theme="active" rel="stylesheet" href="assets/styles.css">
+  <script src="assets/theme-loader.js?v=20260618-newsletter-theme"></script>
+  <link rel="stylesheet" href="assets/student-ai-cards.css?v=student-ai-cards-v2">
+</head>
+<body>
+  <nav class="nav-blur fixed inset-x-0 top-0 z-50 border-b border-neutral-200/80">
+    <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
+      <a class="site-logo" href="index.html" aria-label="ARSEN AI 홈"><span class="site-logo-mark">AI</span><span>ARSEN AI</span></a>
+      <div class="hidden items-center gap-5 text-sm font-semibold text-neutral-500 md:flex">
+        <a class="nav-link" href="education.html">강의/교육</a>
+        <a class="nav-link" href="store.html">스토어</a>
+        <a class="nav-link" href="blog-automation.html">블로그 자동화</a>
+        <a class="nav-link" href="cases.html">사례</a>
+        <a class="nav-link" href="student-ai-cards.html">AI 명함</a>
+        <a class="nav-link" href="https://apply.arsen-ai.com/frontend/status.html">예약 확인</a>
+        <a class="nav-link" href="https://apply.arsen-ai.com/frontend/study.html">스터디</a>
+        <a class="nav-link" href="contact.html">채널</a>
+        <a class="nav-pill" href="consulting.html">상담 신청</a>
+      </div>
+      <button id="menuBtn" class="md:hidden rounded-full border border-neutral-200 px-4 py-2 text-sm font-bold" type="button" aria-label="메뉴 열기" aria-expanded="false">메뉴</button>
+    </div>
+    <div id="mobileMenu" class="hidden border-t border-neutral-200 bg-white px-5 py-4 md:hidden">
+      <div class="grid gap-3 text-sm font-bold text-neutral-700">
+        <a href="education.html">강의/교육</a><a href="store.html">스토어</a><a href="blog-automation.html">블로그 자동화</a><a href="cases.html">사례</a><a href="student-ai-cards.html">AI 명함</a><a href="https://apply.arsen-ai.com/frontend/status.html">예약 확인</a><a href="https://apply.arsen-ai.com/frontend/study.html">스터디</a><a href="contact.html">채널</a>
+        <a class="nav-pill mt-2" href="consulting.html">상담 신청</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="bg-neutral-950 pt-16 text-white">
+    <div class="mx-auto grid max-w-6xl gap-8 px-5 py-24 md:py-28 lg:grid-cols-[1fr_360px] lg:items-end">
+      <div data-animate>
+        <p class="section-label">student work gallery</p>
+        <h1 class="headline mt-5 max-w-3xl text-4xl md:text-5xl">수강생 AI 명함</h1>
+        <p class="mt-6 max-w-2xl text-lg text-white/65">AI 결과물 제작 초급 4주반에서 만든 이미지, 소개글, 쇼츠 아이디어를 개인 명함 웹페이지 형태로 정리한 공간입니다.</p>
+      </div>
+      <div class="grid gap-3" data-animate data-delay="2">
+        <div class="metric-card p-5"><span class="text-sm text-white/48">형식</span><strong class="mt-2 block text-xl font-black">개인 결과물 포트폴리오</strong></div>
+        <div class="metric-card p-5"><span class="text-sm text-white/48">공개 기준</span><strong class="mt-2 block text-xl font-black">동의 후 운영자 검수</strong></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="py-20 md:py-24">
+      <div class="mx-auto max-w-6xl px-5">
+        <div class="max-w-3xl" data-animate>
+          <p class="section-label">sample cards</p>
+          <h2 class="headline mt-4 text-3xl md:text-4xl">4주 뒤, 나를 설명하는 작은 웹페이지를 남깁니다.</h2>
+          <p class="mt-5 text-neutral-500">아래는 실제 개인정보를 사용하지 않은 가상 예시입니다. 결과물을 단순 후기 대신, 내가 하는 일과 다음 작업까지 이어지는 명함으로 정리하는 방식을 보여줍니다.</p>
+        </div>
+        <div class="student-card-grid mt-12" data-student-card-list aria-label="수강생 AI 명함 가상 예시 목록"></div>
+      </div>
+    </section>
+
+    <section id="student-card-detail" class="surface py-20 md:py-24">
+      <div class="mx-auto max-w-6xl px-5">
+        <div class="max-w-3xl" data-animate>
+          <p class="section-label">card detail</p>
+          <h2 class="headline mt-4 text-3xl md:text-4xl">선택한 명함 자세히 보기</h2>
+        </div>
+        <article class="student-detail soft-card mt-10 p-6 md:p-8" data-student-card-detail aria-live="polite"></article>
+      </div>
+    </section>
+
+    <section class="py-20 md:py-24">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+        <div data-animate>
+          <p class="section-label">publish safely</p>
+          <h2 class="headline mt-4 text-3xl md:text-4xl">공개할 내용은 본인이 선택합니다.</h2>
+        </div>
+        <div class="grid gap-4 text-neutral-500">
+          <p>실제 수강생 명함에는 활동명, 공개 동의한 이미지, 결과물 설명처럼 본인이 허용한 정보만 담습니다. 연락처, 개인 계정, 고객 정보는 기본적으로 공개하지 않습니다.</p>
+          <p class="student-consent-note">실제 수강생 결과물 게시에는 공개 범위와 이용 목적을 확인하는 별도 동의가 필요합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-neutral-950 py-20 text-white md:py-24">
+      <div class="mx-auto max-w-6xl px-5 text-center" data-animate>
+        <p class="section-label">make your card</p>
+        <h2 class="headline mx-auto mt-4 max-w-2xl text-3xl md:text-4xl">나도 이런 AI 명함을 만들고 싶다면</h2>
+        <p class="mx-auto mt-5 max-w-2xl text-white/58">수업에서 만든 결과물을 한 곳에 모아, 나를 설명하는 페이지로 정리해 볼 수 있습니다.</p>
+        <div class="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+          <a class="btn-light" href="paid-class.html">AI 결과물 제작 초급 4주반 보기</a>
+          <a class="btn-ghost" href="education.html">강의/교육 전체 보기</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-neutral-200 bg-white py-12">
+    <div class="mx-auto grid max-w-6xl gap-8 px-5 md:grid-cols-3">
+      <div><a class="site-logo" href="index.html"><span class="site-logo-mark">AI</span><span>ARSEN AI</span></a><p class="mt-4 text-sm text-neutral-500">AI 교육과 자동화 운영을 만듭니다.</p></div>
+      <div class="grid gap-2 text-sm font-semibold text-neutral-500"><a href="education.html">강의/교육</a><a href="store.html">스토어</a><a href="blog-automation.html">블로그 자동화</a><a href="cases.html">사례</a><a href="student-ai-cards.html">AI 명함</a><a href="https://apply.arsen-ai.com/frontend/status.html">예약 확인</a><a href="https://apply.arsen-ai.com/frontend/study.html">스터디</a><a href="legal-checklist.html">법무 체크</a><a href="contact.html">채널</a></div>
+      <div class="text-sm text-neutral-500"><p class="font-bold text-neutral-900">공개 안내</p><p class="mt-3">수강생 결과물은 공개 동의와 운영자 검수 후에만 게시합니다.</p><p class="mt-5">© 2026 ARSEN AI. All rights reserved.</p></div>
+    </div>
+  </footer>
+  <script src="assets/student-ai-cards.js?v=student-ai-cards-v1"></script>
+  <script src="assets/site.js?v=20260618-newsletter-phone"></script>
+</body>
+</html>
