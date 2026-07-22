@@ -144,7 +144,7 @@
     }
     payload.page_url = window.location.href;
     payload.referrer = document.referrer || "";
-    payload.consent_privacy = payload.consent_privacy || true;
+    payload.consent_privacy = String(payload.consent_privacy || "").toLowerCase() === "true";
     return payload;
   };
 
@@ -162,7 +162,11 @@
       try {
         const endpoint = form.dataset.endpoint || "https://apply.arsen-ai.com/api/consultations";
         const payload = formPayload(form);
+        if (!payload.consent_privacy) throw new Error("개인정보 수집·이용 동의가 필요합니다.");
         if (form.dataset.source === "home_newsletter") {
+          if (String(payload.consent_marketing || "").toLowerCase() !== "true") {
+            throw new Error("광고성 소식 수신 동의가 필요합니다.");
+          }
           const name = String(payload.name || "").trim();
           const digits = String(payload.phone || payload.contact || "").replace(/[^\d]/g, "");
           if (!name) throw new Error("이름을 입력해주세요.");

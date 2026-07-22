@@ -7,6 +7,8 @@ output/
 .vscode/
 .idea/
 .wrangler/
+node_modules/
+test-results/
 
 # 로그 (T008 logging policy — 레포 루트 로그 금지)
 *.log
