@@ -67,6 +67,14 @@ test("all public headers expose the AI 명함 route", async ({ page }) => {
   }
 });
 
+test("course recruitment copy consistently presents the second cohort", async ({ page }) => {
+  for (const pagePath of ["index.html", "education.html", "paid-class.html", "free-class.html"]) {
+    await page.goto(`/${pagePath}`, { waitUntil: "domcontentloaded" });
+    await expect(page.locator("body")).toContainText("2기");
+    await expect(page.locator("body")).not.toContainText("1기");
+  }
+});
+
 test("mobile menus reveal the AI 명함 route", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "mobile", "mobile-only interaction");
   for (const pagePath of ["index.html", "blog-automation.html", "student-ai-cards.html"]) {
