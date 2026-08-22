@@ -21,3 +21,11 @@
 - Keep this project separate from `ai-tools` POC work unless the user chooses a publishing step.
 - Blog automation may produce local drafts in `ai-tools`; moving content here is a separate stop gate.
 - Check git status and recent commits before any edit.
+- At the start of substantial homepage work, explicitly choose `direct Codex`, `Orca delegation`, or `Work Bus delegation`.
+- Use direct Codex for narrow static-site edits that can be implemented and verified immediately in the current session.
+- Use Orca for parallel QA, copy/design review, research/audit, or delegated Claude/Antigravity work. Consumer Gemini-family work must use `agy`, not the legacy `gemini` CLI.
+- Use Work Bus for Windows, scheduled, durable, headless, or cross-machine work that must survive the current session.
+- Do not create Work Bus tasks just to create activity. Default to 0 new tasks; create at most 1-2 narrow tasks unless the user explicitly approves more.
+- Every new Work Bus task must include purpose, target files/paths, whether mutation is allowed, external send/publish/deploy forbidden, expected `final_status_code`, verification method, and result storage location.
+- Auto/refill mode stays off by default. Use `prepare` or a bounded short `auto --max-tasks` run only after explicit operator approval.
+- After worker results return, Codex must classify them as applied/tested/proposal/stale/duplicate/blocked and decide whether they actually changed the usable public site.
