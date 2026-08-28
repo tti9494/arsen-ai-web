@@ -21,6 +21,27 @@ const publicPages = [
 
 const formPages = ["index.html", "consulting.html", "store.html", "yoonbot.html"];
 
+const yoonbotReleaseEndpoint = "https://apply.arsen-ai.com/api/yoonbot/release";
+const yoonbotReadyRelease = {
+  download_ready: true,
+  latest_version: "1.1.0",
+  artifact_name: "YoonBot-Setup-1.1.0.exe",
+  artifact_download_url: "https://apply.arsen-ai.com/downloads/YoonBot-Setup-1.1.0.exe",
+  sha256: "0f".repeat(32),
+  size_bytes: 52428800,
+};
+
+function mockYoonbotRelease(page, body) {
+  return page.route(yoonbotReleaseEndpoint, (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      headers: { "access-control-allow-origin": "*" },
+      body: JSON.stringify(body),
+    }),
+  );
+}
+
 function assertLocalLinksExist(hrefs, pagePath) {
   for (const href of hrefs) {
     if (!href || href.startsWith("#") || /^(mailto:|tel:)/.test(href)) continue;
@@ -114,6 +135,33 @@ test("personal-information forms show explicit consent and privacy policy before
       await expect(form.locator('input[name="consent_marketing"][type="checkbox"][required]')).toHaveCount(1);
     }
   }
+});
+
+test("yoonbot download link activates only from a valid release contract", async ({ page }) => {
+  await mockYoonbotRelease(page, yoonbotReadyRelease);
+  await page.goto("/yoonbot.html", { waitUntil: "domcontentloaded" });
+
+  const downloadLink = page.locator("#yoonbotDownloadLink");
+  await expect(downloadLink).toHaveAttribute("href", yoonbotReadyRelease.artifact_download_url);
+  await expect(downloadLink).not.toHaveAttribute("aria-disabled", /.*/);
+  await expect(page.locator("#yoonbotReleaseStatus")).toHaveAttribute("data-release-state", "ready");
+  await expect(page.locator("#yoonbotReleaseVersion")).toHaveText(yoonbotReadyRelease.latest_version);
+  await expect(page.locator("#yoonbotReleaseSha")).toHaveText(yoonbotReadyRelease.sha256);
+  await expect(page.locator("#yoonbotReleaseSize")).toContainText("52,428,800");
+});
+
+test("yoonbot download stays fail-closed when the release is unavailable", async ({ page }) => {
+  await mockYoonbotRelease(page, { download_ready: false });
+  await page.goto("/yoonbot.html", { waitUntil: "domcontentloaded" });
+
+  const downloadLink = page.locator("#yoonbotDownloadLink");
+  await expect(page.locator("#yoonbotReleaseStatus")).toHaveText("릴리스 준비 중");
+  await expect(downloadLink).toHaveAttribute("aria-disabled", "true");
+  await expect(downloadLink).not.toHaveAttribute("href", /.*/);
+  await expect(page.locator("#yoonbotReleaseMeta")).toBeHidden();
+  await expect(page.locator('#download a[href="https://apply.arsen-ai.com/api/yoonbot/manifest"]')).toHaveCount(1);
+  await expect(page.locator('a[href="https://apply.arsen-ai.com/frontend/yoonbot.html#order"]')).toHaveCount(2);
+  await expect(page.locator('main a[href="consulting.html"]')).toHaveCount(1);
 });
 
 test("homepage visual smoke attaches a viewport snapshot", async ({ page }, testInfo) => {

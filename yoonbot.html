@@ -32,7 +32,7 @@
         <p class="mt-6 max-w-2xl text-lg text-white/66">YOONBOT은 카카오톡 안내와 반복 메시지 업무를 보조하는 단순 자동화 프로그램입니다.</p>
         <div class="mt-9 flex flex-col gap-3 sm:flex-row">
           <a class="btn-light" href="#pricing">요금제 보기</a>
-          <a class="btn-ghost" href="#download">파일럿 런처 다운로드</a>
+          <a class="btn-ghost" href="#download">Windows 설치 프로그램 다운로드</a>
           <a class="btn-ghost" href="consulting.html">도입 상담</a>
         </div>
       </div>
@@ -78,20 +78,25 @@
       <div class="mx-auto grid max-w-6xl gap-10 px-5 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
         <div data-animate>
           <p class="section-label">download</p>
-          <h2 class="headline mt-4 text-3xl md:text-4xl">파일럿 고객은 공식 다운로드 페이지에서 최신 Windows 런처를 받습니다.</h2>
-          <p class="mt-5 text-neutral-500">다운로드 파일과 버전·SHA-256 검증 정보는 apply.arsen-ai.com에서 함께 제공합니다. YOONBOT 사용에는 구매 확인 후 발급되는 라이선스 키가 필요합니다.</p>
+          <h2 class="headline mt-4 text-3xl md:text-4xl">파일럿 고객은 공식 배포 채널에서 최신 Windows 설치 프로그램을 받습니다.</h2>
+          <p class="mt-5 text-neutral-500">설치 파일과 버전·SHA-256 검증 정보는 apply.arsen-ai.com에서 함께 제공합니다. YOONBOT 사용에는 구매 확인 후 발급되는 라이선스 키가 필요합니다.</p>
           <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a class="btn-dark" href="https://apply.arsen-ai.com/frontend/yoonbot.html#download">다운로드 페이지 열기</a>
-            <a class="btn-outline" href="https://apply.arsen-ai.com/api/launcher/release">버전 및 검증 정보</a>
+            <a id="yoonbotDownloadLink" class="btn-dark" aria-disabled="true">Windows 설치 프로그램 다운로드</a>
+            <a class="btn-outline" href="https://apply.arsen-ai.com/api/yoonbot/manifest">버전 및 검증 정보</a>
           </div>
-          <p class="mt-4 text-sm font-semibold text-neutral-500">현재 버전과 지원 환경은 공식 다운로드 페이지에서 확인할 수 있습니다.</p>
+          <p id="yoonbotReleaseStatus" class="mt-4 text-sm font-semibold text-neutral-500" role="status" aria-live="polite" data-release-state="loading">릴리스 정보를 확인하는 중입니다.</p>
+          <dl id="yoonbotReleaseMeta" class="mt-3 hidden grid gap-1 text-sm text-neutral-500">
+            <div class="flex gap-2"><dt class="font-bold text-neutral-700">버전</dt><dd id="yoonbotReleaseVersion"></dd></div>
+            <div class="flex gap-2"><dt class="font-bold text-neutral-700">SHA-256</dt><dd id="yoonbotReleaseSha" class="break-all"></dd></div>
+            <div class="flex gap-2"><dt class="font-bold text-neutral-700">크기</dt><dd id="yoonbotReleaseSize"></dd></div>
+          </dl>
         </div>
         <div class="soft-card p-7" data-animate data-delay="2">
           <span class="chip">공식 경로</span>
           <h3 class="mt-7 text-2xl font-black">고객 다운로드 순서</h3>
           <ol class="mt-5 grid gap-3 text-neutral-500">
-            <li>1. 이 페이지에서 다운로드 페이지를 엽니다.</li>
-            <li>2. Windows 런처 zip을 내려받고 압축을 해제합니다.</li>
+            <li>1. 이 페이지에서 릴리스 준비 상태를 확인합니다.</li>
+            <li>2. Windows 설치 프로그램(YoonBot-Setup-1.1.0.exe)을 내려받아 설치합니다.</li>
             <li>3. 발급받은 라이선스 키로 실행 후 인증합니다.</li>
           </ol>
         </div>
@@ -156,5 +161,63 @@
     </div>
   </footer>
   <script src="assets/site.js?v=20260618-newsletter-phone"></script>
+  <script>
+    (function () {
+      var RELEASE_URL = "https://apply.arsen-ai.com/api/yoonbot/release";
+      var EXPECTED_ARTIFACT = "YoonBot-Setup-1.1.0.exe";
+      var link = document.getElementById("yoonbotDownloadLink");
+      var status = document.getElementById("yoonbotReleaseStatus");
+      var meta = document.getElementById("yoonbotReleaseMeta");
+      if (!link || !status || !meta) return;
+
+      function failClosed() {
+        link.removeAttribute("href");
+        link.setAttribute("aria-disabled", "true");
+        status.textContent = "릴리스 준비 중";
+        status.setAttribute("data-release-state", "unavailable");
+        meta.classList.add("hidden");
+      }
+
+      function isValidRelease(data) {
+        if (!data || data.download_ready !== true) return false;
+        if (typeof data.artifact_download_url !== "string") return false;
+        try {
+          if (new URL(data.artifact_download_url).protocol !== "https:") return false;
+        } catch (error) {
+          return false;
+        }
+        if (data.artifact_name !== EXPECTED_ARTIFACT) return false;
+        if (typeof data.latest_version !== "string" || !data.latest_version) return false;
+        if (typeof data.sha256 !== "string" || !/^[0-9a-f]{64}$/i.test(data.sha256)) return false;
+        if (typeof data.size_bytes !== "number" || !isFinite(data.size_bytes) || data.size_bytes <= 0) return false;
+        return true;
+      }
+
+      function formatBytes(bytes) {
+        return (bytes / (1024 * 1024)).toFixed(1) + " MB (" + bytes.toLocaleString("ko-KR") + " bytes)";
+      }
+
+      fetch(RELEASE_URL, { headers: { Accept: "application/json" } })
+        .then(function (response) {
+          if (!response.ok) throw new Error("release endpoint " + response.status);
+          return response.json();
+        })
+        .then(function (data) {
+          if (!isValidRelease(data)) {
+            failClosed();
+            return;
+          }
+          link.setAttribute("href", data.artifact_download_url);
+          link.removeAttribute("aria-disabled");
+          document.getElementById("yoonbotReleaseVersion").textContent = data.latest_version;
+          document.getElementById("yoonbotReleaseSha").textContent = data.sha256;
+          document.getElementById("yoonbotReleaseSize").textContent = formatBytes(data.size_bytes);
+          meta.classList.remove("hidden");
+          status.textContent = "Windows 설치 프로그램 다운로드가 준비되었습니다.";
+          status.setAttribute("data-release-state", "ready");
+        })
+        .catch(failClosed);
+    })();
+  </script>
 </body>
 </html>
