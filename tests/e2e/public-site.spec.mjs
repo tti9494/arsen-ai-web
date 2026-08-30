@@ -282,6 +282,22 @@ for (const [label, overrides] of yoonbotInvalidReleases) {
   });
 }
 
+test("_headers applies exactly the agreed security headers to every path", () => {
+  const headersSource = fs.readFileSync(path.resolve(rootDir, "_headers"), "utf8");
+  const lines = headersSource.split("\n").filter((line) => line.trim() !== "");
+  expect(lines[0]).toBe("/*");
+  expect(lines.slice(1).map((line) => line.trim())).toEqual([
+    "X-Content-Type-Options: nosniff",
+    "X-Frame-Options: DENY",
+    "Referrer-Policy: strict-origin-when-cross-origin",
+    "Permissions-Policy: camera=(), microphone=(), geolocation=()",
+    "Strict-Transport-Security: max-age=31536000",
+  ]);
+  // HSTS stays conservative until subdomain coverage is reviewed.
+  expect(headersSource).not.toContain("includeSubDomains");
+  expect(headersSource).not.toContain("preload");
+});
+
 test("homepage visual smoke attaches a viewport snapshot", async ({ page }, testInfo) => {
   await page.goto("/index.html", { waitUntil: "domcontentloaded" });
   await expect(page.locator("main")).toBeVisible();
