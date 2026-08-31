@@ -223,6 +223,10 @@ test("yoonbot purchase, license, and official download stay connected in order",
   await expect(orderSteps.nth(1)).toContainText("라이선스 키 발급");
   await expect(orderSteps.nth(2)).toContainText("내려받아");
   await expect(orderSteps.nth(3)).toContainText("인증");
+  const macDownload = page.locator("#yoonbotMacDownloadLink");
+  await expect(macDownload).toHaveAttribute("aria-disabled", "true");
+  await expect(macDownload).not.toHaveAttribute("href", /.*/);
+  await expect(page.locator('a[href="https://apply.arsen-ai.com/api/yoonbot/manifest?platform=macos"]')).toHaveCount(1);
 });
 
 test("yoonbot download stays fail-closed while the release lookup is pending", async ({ page }) => {
